@@ -44,7 +44,7 @@ export const LinkQuikWidget = ({ results, port }: ILinkQuikWidgetProps) => {
             <p className='text-4xl font-sans font-thin mb-1'>People found</p>
             <p className='text-base font-thin'>In this page, there are {results?.length} people,
             in which {oldConnectionCount} are already your connections (or in pending)</p>
-            <div className='overflow-scroll max-h-60 mt-2'>
+            <div className='overflow-scroll max-h-[22rem] mt-2'>
                 <ul>
                     {results.map(x => <li className='text-lg font-extralight mb-2'>{x.name} - <span className='text-sm font-medium'>{x.textInBtn === "Message" ? "Connected": x.textInBtn}</span></li>)}
                 </ul>

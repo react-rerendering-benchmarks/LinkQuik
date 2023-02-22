@@ -5,6 +5,8 @@ import Popup from "./popup";
 
 function init() {
     const appContainer = document.createElement('div')
+    document.body.style.height = '550px'
+    document.body.style.width = '350px'
     document.body.appendChild(appContainer)
     if (!appContainer) {
         throw new Error("Can not find AppContainer");
