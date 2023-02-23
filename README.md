@@ -3,7 +3,9 @@
 A super simple react based Chrome extension to send connection requests to people in LinkedIn quickly.
 
 ## Stack
-This extension is developed using React and Webpack.
+This extension is developed using React, Typescript, Tailwind and Webpack.
+
+It also uses Jest and React testing library for testing the components
 
 * The entrypoint(manifest.json) is present in static folder.
 * The popup folder contains the UI for the extension.
