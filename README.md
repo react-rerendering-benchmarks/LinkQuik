@@ -21,3 +21,5 @@ You can install and run the extension by using the following command:
 
 * This will load the extension to your browser, you can pin it if you want.
 * Go to linkedin people search page to see it in action!
+
+I have also attached release 1.0 in the github releases section.
