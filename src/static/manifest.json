@@ -9,10 +9,7 @@
         "default_icon" : "linkedin.png"
     },
     "permissions": [
-        "activeTab",
-        "bookmarks",
-        "storage",
-        "identity"
+        "activeTab"
     ],
     "icons": {
         "16" : "linkedin.png",
