@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { REQUEST_TYPES } from "../constants";
+import { CHROME_CONNECTION_PORT_NAME, LINKEDIN_PEOPLE_SEARCH_URL, REQUEST_TYPES } from "../constants";
 import { IMessageType, IPeopleInfo } from "../types";
-import { LinkQuikWidget } from "./components/LinkQuikWidget";
-import { NotInLinkedInPage } from "./components/NotInLinkedInPage";
+import { LinkQuikWidget } from "./components/LinkQuikWidget/LinkQuikWidget";
+import { NotInLinkedInPage } from "./components/NotInLinkedInPage/NotInLinkedInPage";
 import './popup.css'
 
 const Popup = () => {
@@ -13,7 +13,7 @@ const Popup = () => {
     useEffect(() => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, async (tabs) => {
 
-            const isLinkedInSearchPage = tabs[0].url.includes("linkedin.com/search/results/people")
+            const isLinkedInSearchPage = tabs[0].url.includes(LINKEDIN_PEOPLE_SEARCH_URL)
             setShowLinkQuik(isLinkedInSearchPage);
 
             if (isLinkedInSearchPage) {
@@ -24,7 +24,7 @@ const Popup = () => {
                     setResults(JSON.parse(resp.data))
                 });
 
-                const port = chrome.tabs.connect(tabs[0].id, {name: "ConnectionStatus"});
+                const port = chrome.tabs.connect(tabs[0].id, {name: CHROME_CONNECTION_PORT_NAME});
                 setPort(port);
             }
         })

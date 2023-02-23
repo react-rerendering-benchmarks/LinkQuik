@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { REQUEST_TYPES } from '../../constants'
-import { IMessageType, IPeopleInfo } from '../../types'
+import { NEW_PEOPLE_PHRASES, OLD_PEOPLE_PHRASES, REQUEST_TYPES } from '../../../constants'
+import { IMessageType, IPeopleInfo } from '../../../types'
 
 export interface ILinkQuikWidgetProps {
     results: IPeopleInfo[];
@@ -15,12 +15,12 @@ export const LinkQuikWidget = ({ results, port }: ILinkQuikWidgetProps) => {
     const [oldConnectionCount, setOldConnectionCount] = useState(0);
 
     useEffect(() => {
-        setBtnDisabled(results?.filter(x => ["Follow", "Connect"].includes(x.textInBtn)).length === 0)
-        setOldConnectionCount(results?.reduce((a, {textInBtn}) => !["Follow", "Connect"].includes(textInBtn) ? a+1: a, 0))
+        setBtnDisabled(results?.filter(x => NEW_PEOPLE_PHRASES.includes(x.textInBtn)).length === 0)
+        setOldConnectionCount(results?.filter(x => OLD_PEOPLE_PHRASES.includes(x.textInBtn)).length)
     }, [results])
 
     useEffect(() => {
-        port.onMessage.addListener(function (msg: IMessageType) {
+        port?.onMessage.addListener(function (msg: IMessageType) {
             if (msg.type === REQUEST_TYPES.INCREMENT_ONE_CONNECTION) {
                 setSentRequestCount(sentRequestCount + 1)
             } else if (msg.type === REQUEST_TYPES.COMPLETED_SENDING_CONNECTIONS) {
@@ -31,8 +31,8 @@ export const LinkQuikWidget = ({ results, port }: ILinkQuikWidgetProps) => {
 
     const clickHandler = () => {
         setOngoingTask(true);
-        chrome.tabs.query({active: true, lastFocusedWindow: true}, async (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, {
+        chrome?.tabs.query({active: true, lastFocusedWindow: true}, async (tabs) => {
+            chrome?.tabs.sendMessage(tabs[0].id, {
                 type: REQUEST_TYPES.SEND_CONNECTION
             });
             setBtnDisabled(true);
@@ -42,16 +42,16 @@ export const LinkQuikWidget = ({ results, port }: ILinkQuikWidgetProps) => {
     return (
         <div className='mt-4 mx-6'>
             <p className='text-4xl font-sans font-thin mb-1'>People found</p>
-            <p className='text-base font-thin'>In this page, there are {results?.length} people,
+            <p className='text-base font-thin' data-testid="description-text">In this page, there are {results?.length} people,
             in which {oldConnectionCount} are already your connections (or in pending)</p>
             <div className='overflow-scroll max-h-[22rem] mt-2'>
                 <ul>
-                    {results.map(x => <li className='text-lg font-extralight mb-2'>{x.name} - <span className='text-sm font-medium'>{x.textInBtn === "Message" ? "Connected": x.textInBtn}</span></li>)}
+                    {results.map(x => <li key={x.name} className='text-lg font-extralight mb-2'>{x.name} - <span className='text-sm font-medium'>{x.textInBtn === "Message" ? "Connected": x.textInBtn}</span></li>)}
                 </ul>
             </div>
-            {!completedTask && <button disabled={btnDisabled} onClick={clickHandler} 
+            {!completedTask && <button data-testid="cta-btn" disabled={btnDisabled} onClick={clickHandler} 
             className='mt-3 py-3 px-5 rounded-md bg-[#007AFE] text-white w-full text-base font-light disabled:bg-gray-300'>{ongoingTask ? `Sending... (${sentRequestCount}/${results?.length - oldConnectionCount})` : 'Send connection request'}</button>}
-            {completedTask && <button disabled
+            {completedTask && <button data-testid="cta-btn" disabled
             className='mt-3 py-3 px-5 rounded-md bg-[#4DA2FF] text-white w-full text-base font-light'>Done</button>}
         </div>
     )
